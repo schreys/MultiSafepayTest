@@ -45,7 +45,8 @@ namespace MultiSafepayTest.Controllers
         /// Log all incoming text in a text file
         /// </summary>
         public void Index()
-        {
+        { 
+
             var path = Server.MapPath(string.Format("~/notification{0}.log", DateTime.Now.ToString("yyyy-MM-dd")));
 
             //check post values
