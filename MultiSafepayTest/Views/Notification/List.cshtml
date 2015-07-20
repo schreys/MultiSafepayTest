@@ -1,0 +1,13 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Content last notification log</h2>
+
+@foreach (string line in Model) { 
+<ul>
+    <li>@line</li>
+
+</ul>
+}

@@ -1,0 +1,137 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+@using Newtonsoft.Json
+
+@model MultiSafepayTest.Models.PaymentModel
+@section scripts {
+    <script language="javascript" type="text/javascript">
+        $(function () {
+            var data = ko.mapping.fromJSON('@Html.Raw(JsonConvert.SerializeObject(this.Model))');
+
+            var inputForm = new InputForm();
+            inputForm.Data = data;
+            ko.applyBindings(inputForm);
+        });
+
+    function InputForm() {
+        var self = this;
+        self.Data = null;
+        self.Waiting = ko.observable(false);
+        self.Post = function(formelement)
+        {
+            self.Waiting(true)
+            $.ajax({
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    url: "@Url.Content("~/Payment/Post2")",
+                    data: ko.mapping.toJSON(self.Data),
+                    dataType: "json",
+                    success: function (data) {
+                        ko.mapping.fromJS(data, self.Data);
+                        self.Waiting(false);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown )
+                    {
+                        self.Waiting(false);
+                        alert(jqXHR.responseText);
+                    }
+            });
+        }
+    }
+    </script>
+}
+
+<h2>MultiSafePay test application</h2>
+
+<div>
+  
+
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Step 1: Create redirect url</h3>
+
+            <div data-bind="visible: Data.Errors().length>0 && !Waiting()">
+                <div data-bind="foreach: Data.Errors" class="alert alert-danger" role="alert">
+                    <div>
+                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                        <span class="sr-only">Error:</span>
+                        <span data-bind="text: $data"></span>
+                    </div>
+                </div>
+            </div>
+
+            <img data-bind="visible: Waiting" src="@Url.Content("~/Content/images/indicator.gif") " />
+            <form method="post" data-bind="{submit: Post}">
+                <div class="form-group">
+                    <label for="orderid">Order id</label>
+                    <input data-bind="value: Data.OrderId" type="text" class="form-control" id="orderid" placeholder="order id">
+                </div>
+                <div class="form-group">
+                    <label for="Description">Description</label>
+                    <input data-bind="value: Data.Description" type="text" class="form-control" id="Description" placeholder="Description">
+                </div>
+                <div class="form-group">
+                    <label for="Amount">Amount</label>
+                    <input data-bind="value: Data.Amount" type="text" class="form-control" id="Amount" placeholder="Amount in cents">
+                </div>
+                <div class="form-group">
+                    <label for="Currency">Currency</label>
+                    <input data-bind="value: Data.Currency" type="text" class="form-control" id="Currency" placeholder="Currency">
+                </div>
+                <div class="form-group">
+                    <label for="NotificationUrl">Notification url</label>
+                    <input data-bind="value: Data.NotificationUrl" type="text" class="form-control" id="NotificationUrl" placeholder="Notification url">
+                </div>
+                <div class="form-group">
+                    <label for="SuccessRedirectUrl">Success redirect url</label>
+                    <input data-bind="value: Data.SuccessRedirectUrl" type="text" class="form-control" id="SuccessRedirectUrl" placeholder="Success redirect url"></div>
+                <div class="form-group">
+                    <label for="CancelRedirectUrl">Cancel redirect url</label>
+                    <input data-bind="value: Data.CancelRedirectUrl" type="text" class="form-control" id="CancelRedirectUrl" placeholder="Cancel redirect url">
+                </div>
+                <div class="form-group">
+                    <label for="Currency">Currency</label>
+                    <input data-bind="value: Data.Currency" type="text" class="form-control" id="Currency" placeholder="Currency">
+                </div>
+                <div class="form-group">
+                    <label for="Country">Country</label>
+                    <input data-bind="value: Data.Country" type="text" class="form-control" id="Country" placeholder="Country">
+                </div>
+                <div class="form-group">
+                    <label for="Locale">Locale</label>
+                    <input data-bind="value: Data.Locale" type="text" class="form-control" id="Locale" placeholder="Locale">
+                </div>
+                <div class="form-group">
+                    <label for="ApiKey">Api Key</label>
+                    <input data-bind="value: Data.ApiKey" type="text" class="form-control" id="ApiKey" placeholder="ApiKey">
+                </div>
+                <div class="form-group">
+                    <label for="Url">Api Url</label>
+                    <div>
+                        <select data-bind="options: Data.ApiUrls(),
+                        value: Data.ApiUrl,"></select>
+                    </div>
+                </div>
+                <div>
+
+                </div>
+
+                <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+
+        </div>
+        <div class="col-md-6"><div>
+            <h3>Response step 1: redirect url</h3>
+            <a target="_blank" data-bind="attr: { href: Data.PaymentUrl}"><span data-bind="text: Data.PaymentUrl"></span></a>
+        </div>
+         </div>
+    </div>
+    
+
+    
+</div>
+
+

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>MultiSafepay</id>
+    <version>0.4.0</version>
+    <title>MultiSafepay Payments</title>
+    <authors>Jason Murray</authors>
+    <owners>Jason Murray</owners>
+    <projectUrl>https://github.com/MultiSafepay/.Net</projectUrl>
+    <iconUrl>https://www.multisafepay.com/img/favicon.ico</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A .NET client for the MultiSafepay payments API. Provides support for all payment methods, Pay After Delivery and Fast Checkout.</description>
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="6.0.6" />
+    </dependencies>
+  </metadata>
+</package>
