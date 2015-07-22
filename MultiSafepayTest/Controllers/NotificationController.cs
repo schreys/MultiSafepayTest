@@ -1,4 +1,7 @@
-﻿using System;
+﻿using MultiSafepayTest.Business.Domain;
+using MultiSafepayTest.Business.Facade;
+using MultiSafepayTest.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -44,7 +47,7 @@ namespace MultiSafepayTest.Controllers
         /// <summary>
         /// Log all incoming text in a text file
         /// </summary>
-        public void Index()
+        public string Index()
         { 
 
             var path = Server.MapPath(string.Format("~/notification{0}.log", DateTime.Now.ToString("yyyy-MM-dd")));
@@ -68,6 +71,33 @@ namespace MultiSafepayTest.Controllers
             }
             else System.IO.File.WriteAllText(path, line);
 
+
+            //now stars the order processing
+            //step 1: get the order from the MultiSafepay client
+            var transactionid = Request["transactionid"];
+            var pm = new PaymentModel();
+            var c = new MultiSafepay.MultiSafepayClient(pm.ApiKey, apiUrl: pm.ApiUrls[0]);
+            bool ordercompleted = false;
+           
+            var order = c.GetOrder(transactionid);
+            if(order != null)
+                ordercompleted = order.Status == "completed";
+           
+
+            if(ordercompleted)
+            {
+                //get our order
+                var facade = FacadeFactory.GetInstance().GetFacade<MSPFacade>();
+                var orderdb = facade.GetById<MSPOrder>(transactionid);
+
+                if (orderdb != null)
+                {
+                    orderdb.Status = MSPOrderStatus.Completed;
+                    facade.Save();
+                }
+
+            }
+            return "OK";
         }
 	}
 }

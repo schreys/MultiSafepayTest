@@ -5,6 +5,16 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiSafepayTest", "MultiSafepayTest\MultiSafepayTest.csproj", "{67E95065-D4C8-40EB-BB05-67122CDF7C8E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiSafepayTest.Business", "MultiSafepayTest.Business\MultiSafepayTest.Business.csproj", "{2DA2294A-99E2-4DCC-A2ED-1C8206910F7B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{AAC1AE11-7122-4357-A44D-F166CA3D3761}"
+	ProjectSection(SolutionItems) = preProject
+		lib\Castle.Core.dll = lib\Castle.Core.dll
+		lib\Castle.DynamicProxy2.dll = lib\Castle.DynamicProxy2.dll
+		lib\Castle.Windsor.dll = lib\Castle.Windsor.dll
+		lib\Castle.Windsor.Lifestyles.dll = lib\Castle.Windsor.Lifestyles.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +25,10 @@ Global
 		{67E95065-D4C8-40EB-BB05-67122CDF7C8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67E95065-D4C8-40EB-BB05-67122CDF7C8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67E95065-D4C8-40EB-BB05-67122CDF7C8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DA2294A-99E2-4DCC-A2ED-1C8206910F7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DA2294A-99E2-4DCC-A2ED-1C8206910F7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DA2294A-99E2-4DCC-A2ED-1C8206910F7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DA2294A-99E2-4DCC-A2ED-1C8206910F7B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,6 @@
-﻿using MultiSafepayTest.Models;
+﻿using MultiSafepayTest.Business.Domain;
+using MultiSafepayTest.Business.Facade;
+using MultiSafepayTest.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -58,9 +60,9 @@ namespace MultiSafepayTest.Controllers
             pm.Errors = new List<string>();
 
             MultiSafepay.Model.PaymentOptions paymentOptions = new MultiSafepay.Model.PaymentOptions();
-            paymentOptions.CancelRedirectUrl = pm.CancelRedirectUrl;
+            paymentOptions.CancelRedirectUrl = pm.CancelRedirectUrl + "/" + pm.OrderId;
             paymentOptions.NotificationUrl = pm.NotificationUrl;
-            paymentOptions.SuccessRedirectUrl = pm.SuccessRedirectUrl;
+            paymentOptions.SuccessRedirectUrl = pm.SuccessRedirectUrl + "/" + pm.OrderId;
 
             var ordermodel = MultiSafepay.Model.OrderRequest.CreateRedirect(pm.OrderId, pm.Description, pm.Amount, pm.Currency, paymentOptions);
             ordermodel.Customer = new MultiSafepay.Model.Customer() { Locale = pm.Locale, Country = pm.Country };
@@ -89,19 +91,37 @@ namespace MultiSafepayTest.Controllers
             else
             {
                 pm.PaymentUrl = message.Data.PaymentUrl;
+
+                var facade = FacadeFactory.GetInstance().GetFacade<MSPFacade>();
+
+                var order = facade.GetById<MSPOrder>(pm.OrderId);
+
+                order = new MSPOrder();
+                order.Id = pm.OrderId;
+                order.OrderId = pm.OrderId;
+                order.Status = MSPOrderStatus.Created;
+                facade.Add(order);
+                var val = facade.Save();
+                pm.Errors = val.BrokenRules.ToList();
             }
 
             return Json(pm);
         }
 
-        public ActionResult Cancel()
+        public ActionResult Cancel(string id)
         {
-            return View();
+            var facade = FacadeFactory.GetInstance().GetFacade<MSPFacade>();
+            var order = facade.GetById<MSPOrder>(id);
+
+            return View(order);
         }
 
-        public ActionResult Success()
+        public ActionResult Success(string id)
         {
-            return View();
+            var facade = FacadeFactory.GetInstance().GetFacade<MSPFacade>();
+            var order = facade.GetById<MSPOrder>(id);
+
+            return View(order);
         }
 	}
 }
